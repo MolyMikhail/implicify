@@ -23,5 +23,8 @@
     },
     "options_page": "./Options/options.html",
     "permissions": ["activeTab", "tabs", "storage", "scripting"],
-    "host_permissions": ["https://www.google.com/*"]
+    "host_permissions": [
+        "https://www.google.com/*",
+        "https://developer.spotify.com/*"
+    ]
 }
