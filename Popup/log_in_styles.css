@@ -13,4 +13,31 @@ body {
 .header {
     width: 300px;
     height: 500px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#log-in {
+    position: absolute;
+
+    width: 100%;
+    height: 50%;
+
+    top: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    color: white;
+    background-color: #1db854;
+    border-color: transparent;
+    border-radius: 10px;
+    
+    padding: 10px;
 }

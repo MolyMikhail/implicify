@@ -3,16 +3,17 @@ body {
     height: 550px;
     margin: 0;
 }
-.rectangle1
-{
-background-color:#4687D6;
-font-size: 15px;
-font-weight: 50;
-color:white;
-text-align: center;
+.rectangle1 {
+    position: absolute;
+    top: 0;
+
+    background-color: #4687d6;
+    font-size: 15px;
+    font-weight: 50;
+    color: white;
+    text-align: center;
 }
-.button1
-{
+.button1 {
     background-color: rgba(255, 255, 255, 0.4);
     border: none;
     color: white;
@@ -22,5 +23,5 @@ text-align: center;
     display: inline-block;
     font-size: 15px;
     margin: 4px 2px;
-    border-radius:20px
+    border-radius: 20px;
 }
