@@ -29,40 +29,37 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
 });
 
+const fetchPlaylists = async (token) => {
+    const result = await fetch(`https://api.spotify.com/v1/me/playlists`, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+    });
+
+    const data = await result.json();
+    return data.categories.items;
+};
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message === "get_name") {
-        chrome.storage.local.get("name", (data) => {
-            if (chrome.runtime.lastError) {
-                sendResponse({
-                    message: "failed",
-                });
-                return;
-            }
+    if (request.message === "fetch_playlists") {
+        // chrome.storage.local.get("name", (data) => {
+        //     if (chrome.runtime.lastError) {
+        //         sendResponse({
+        //             message: "failed",
+        //         });
+        //         return;
+        //     }
 
-            sendResponse({
-                message: "success",
-                payload: data.name,
-            });
+        //     sendResponse({
+        //         message: "success",
+        //         payload: data.name,
+        //     });
+        // });
+
+        console.log(fetchPlaylists());
+        sendResponse({
+            message: "success",
+            payload: null,
         });
-
-        return true;
-    } else if (request.message === "change_name") {
-        chrome.storage.local.set(
-            {
-                name: request.payload,
-            },
-            () => {
-                if (chrome.runtime.lastError) {
-                    sendResponse({
-                        message: "fail",
-                    });
-                }
-
-                sendResponse({
-                    message: "success",
-                });
-            }
-        );
 
         return true;
     }

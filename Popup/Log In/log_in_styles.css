@@ -47,6 +47,10 @@ button {
     align-items: center;
 }
 
+button:hover {
+    transform: translateY(2px);
+}
+
 #spotify-logo {
     width: 25px;
     height: 25px;
