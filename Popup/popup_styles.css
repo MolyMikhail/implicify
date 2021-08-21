@@ -1,9 +1,10 @@
 body {
     width: 300px;
     height: 550px;
+
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
-    background-color: #2B4D61;
+
+    background-color: #2b4d61;
 }
