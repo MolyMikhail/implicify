@@ -3,27 +3,34 @@ body {
     height: 550px;
     margin: 0;
 }
+
 .rectangle1 {
     position: absolute;
+
+    width: 100%;
     top: 0;
 
     background-color: #4687d6;
-    font-size: 15px;
+    font-size: 11px;
     font-weight: 50;
     color: white;
     text-align: center;
     padding: 5px;
     margin-bottom: 0;
 }
+
 .button1 {
     background-color: rgba(255, 255, 255, 0.4);
     border: none;
     color: white;
-    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 15px;
+    font-size: 11px;
     margin: 4px 2px;
     border-radius: 20px;
 }
