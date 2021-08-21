@@ -24,7 +24,7 @@
     "options_page": "./Options/options.html",
     "permissions": ["activeTab", "tabs", "storage", "scripting", "identity"],
     "host_permissions": [
-        "https://www.google.com/*",
+        "https://open.spotify.com/playlist/*",
         "https://developer.spotify.com/*"
     ]
 }

@@ -4,17 +4,31 @@ const CLIENT_ID = encodeURIComponent("39d98902d36a47ed9bd7a6c50e571a20");
 const CLIENT_SECRET = encodeURIComponent("d4347ad265fb47c9b6acb80ca1ab7a3f");
 
 const RESPONSE_TYPE = encodeURIComponent("token");
-const REDIRECT_URI = encodeURIComponent('https://enomnapglgekdkdjjalhhbmbnjmlfoba.chromiumapp.org/');
+const REDIRECT_URI = encodeURIComponent(
+    "https://enomnapglgekdkdjjalhhbmbnjmlfoba.chromiumapp.org/"
+);
 const SCOPE = encodeURIComponent("user-read-email");
 const SHOW_DIALOG = encodeURIComponent("true");
-let STATE = "";
-let ACCESS_TOKEN = "";
 
-let user_signed_in = false;
+let state = "";
+let accessToken = "";
+let playlistID = "";
+
+let userSignedIn = false;
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    // Checks if page loading is complete and URL starts with http
+    if (changeInfo.status === "complete" && /^http/.test(tab.url)) {
+        playlistID = tab.url.split("/playlist/")[1].split("?")[0];
+        console.log(
+            "Found Spotify playlist in active tab with the ID: " + playlistID
+        );
+    }
+});
 
 function create_spotify_endpoint() {
     console.log("Creating Spotify endpoint.");
-    STATE = encodeURIComponent(
+    state = encodeURIComponent(
         "meet" + Math.random().toString(36).substring(2, 15)
     );
 
@@ -22,7 +36,7 @@ function create_spotify_endpoint() {
 ?client_id=${CLIENT_ID}
 &response_type=${RESPONSE_TYPE}
 &redirect_uri=${REDIRECT_URI}
-&state=${STATE}
+&state=${state}
 &scope=${SCOPE}
 &show_dialog=${SHOW_DIALOG}
 `;
@@ -56,11 +70,15 @@ const fetchPlaylists = async (token) => {
     return data;
 };
 
+const fetchSongsFromPlaylist = async (token, playlistID) => {
+    // Call API
+};
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === "login") {
         console.log("'login' request called.");
-        console.log("user_sign_in: " + user_signed_in);
-        if (user_signed_in) {
+        console.log("user_sign_in: " + userSignedIn);
+        if (userSignedIn) {
             console.log("User is already signed in.");
         } else {
             chrome.identity.launchWebAuthFlow(
@@ -81,25 +99,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                         ) {
                             sendResponse({ message: "fail" });
                         } else {
-                            ACCESS_TOKEN = redirect_url.substring(
+                            accessToken = redirect_url.substring(
                                 redirect_url.indexOf("access_token=") + 13
                             );
-                            ACCESS_TOKEN = ACCESS_TOKEN.substring(
+                            accessToken = accessToken.substring(
                                 0,
-                                ACCESS_TOKEN.indexOf("&")
+                                accessToken.indexOf("&")
                             );
 
                             let state = redirect_url.substring(
                                 redirect_url.indexOf("state=") + 6
                             );
 
-                            if (state === STATE) {
+                            if (state === state) {
                                 console.log("SUCCESS");
-                                user_signed_in = true;
+                                userSignedIn = true;
 
                                 setTimeout(() => {
-                                    ACCESS_TOKEN = "";
-                                    user_signed_in = false;
+                                    accessToken = "";
+                                    userSignedIn = false;
                                 }, 3600000);
 
                                 chrome.action.setPopup(
@@ -119,15 +137,42 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     } else if (request.message === "logout") {
         console.log("Logging user out.");
-        user_signed_in = false;
+        userSignedIn = false;
         chrome.action.setPopup({ popup: "./popup.html" }, () => {
             sendResponse({ message: "success" });
         });
 
         return true;
     } else if (request.message === "get-playlists") {
-        console.log(fetchPlaylists(ACCESS_TOKEN));
+        console.log(fetchPlaylists(accessToken));
+
+        sendResponse({
+            message: "success",
+            payload: [
+                {
+                    albumName: "",
+                    albumCoverURL: "",
+                },
+                // ...
+            ],
+        });
+
         return true;
+    } else if (request.message === "get-songs-from-playlist") {
+        songs = fetchSongsFromPlaylist(accessToken, request.playlistID);
+
+        sendResponse({
+            message: "success",
+            payload: [
+                {
+                    songName: "",
+                    songArtist: "",
+                    songCoverURL: "",
+                    isExplicit: false,
+                },
+                // ...
+            ],
+        });
     }
     return true;
 });

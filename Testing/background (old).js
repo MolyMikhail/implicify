@@ -73,7 +73,7 @@ function create_spotify_endpoint() {
     ?client_id=${CLIENT_ID}
     &response_types=${REPONSE_TYPE}
     &redirect_uri=${REDIRECT_URI}
-    &state=${STATE}
+    &state=${state}
     &scope=${SCOPES}
     &show_dialog=${SHOW_DIALOG}
     `;
@@ -85,7 +85,7 @@ function create_spotify_endpoint() {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === "login") {
-        if (user_signed_in) {
+        if (userSignedIn) {
             console.log("User is already signed in.");
 
             return true;
@@ -120,7 +120,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
 
     } else if (request.message === "logout") {
-        user_signed_in = false;
+        userSignedIn = false;
         
         return true;
 
