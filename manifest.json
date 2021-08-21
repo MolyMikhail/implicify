@@ -22,7 +22,7 @@
         }
     },
     "options_page": "./Options/options.html",
-    "permissions": ["activeTab", "tabs", "storage", "scripting"],
+    "permissions": ["activeTab", "tabs", "storage", "scripting", "identity"],
     "host_permissions": [
         "https://www.google.com/*",
         "https://developer.spotify.com/*"

@@ -4,9 +4,7 @@ const CLIENT_ID = encodeURIComponent("39d98902d36a47ed9bd7a6c50e571a20");
 const CLIENT_SECRET = encodeURIComponent("d4347ad265fb47c9b6acb80ca1ab7a3f");
 
 const RESPONSE_TYPE = encodeURIComponent("token");
-const REDIRECT_URI = encodeURIComponent(
-    "https://aecmmjgcfmkkikpcbhpnphihphpbmhnb.chromiumapp.org/"
-);
+const REDIRECT_URI = encodeURIComponent('https://enomnapglgekdkdjjalhhbmbnjmlfoba.chromiumapp.org/');
 const SCOPE = encodeURIComponent("user-read-email");
 const SHOW_DIALOG = encodeURIComponent("true");
 let STATE = "";
@@ -15,6 +13,7 @@ let ACCESS_TOKEN = "";
 let user_signed_in = false;
 
 function create_spotify_endpoint() {
+    console.log("Creating Spotify endpoint.");
     STATE = encodeURIComponent(
         "meet" + Math.random().toString(36).substring(2, 15)
     );
@@ -33,12 +32,37 @@ function create_spotify_endpoint() {
     return oauth2_url;
 }
 
+const getToken = async () => {
+    const result = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Basic " + btoa(CLIENT_ID + ":" + CLIENT_SECRET),
+        },
+        body: "grant_type=client_credentials",
+    });
+
+    const data = await result.json();
+    return data.access_token;
+};
+
+const fetchPlaylists = async (token) => {
+    const result = await fetch(`https://api.spotify.com/v1/me/playlists`, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+    });
+
+    const data = await result.json();
+    return data;
+};
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === "login") {
+        console.log("'login' request called.");
+        console.log("user_sign_in: " + user_signed_in);
         if (user_signed_in) {
             console.log("User is already signed in.");
         } else {
-            // sign the user in with Spotify
             chrome.identity.launchWebAuthFlow(
                 {
                     url: create_spotify_endpoint(),
@@ -46,7 +70,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 },
                 function (redirect_url) {
                     if (chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError);
                         sendResponse({ message: "fail" });
+                        console.log("Failed to launch WebAuthFlow");
                     } else {
                         if (
                             redirect_url.includes(
@@ -62,6 +88,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                                 0,
                                 ACCESS_TOKEN.indexOf("&")
                             );
+
                             let state = redirect_url.substring(
                                 redirect_url.indexOf("state=") + 6
                             );
@@ -75,7 +102,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                                     user_signed_in = false;
                                 }, 3600000);
 
-                                chrome.browserAction.setPopup(
+                                chrome.action.setPopup(
                                     { popup: "./popup-signed-in.html" },
                                     () => {
                                         sendResponse({ message: "success" });
@@ -89,14 +116,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 }
             );
         }
-
         return true;
     } else if (request.message === "logout") {
+        console.log("Logging user out.");
         user_signed_in = false;
-        chrome.browserAction.setPopup({ popup: "./popup.html" }, () => {
+        chrome.action.setPopup({ popup: "./popup.html" }, () => {
             sendResponse({ message: "success" });
         });
 
         return true;
+    } else if (request.message === "get-playlists") {
+        console.log(fetchPlaylists(ACCESS_TOKEN));
+        return true;
     }
+    return true;
 });

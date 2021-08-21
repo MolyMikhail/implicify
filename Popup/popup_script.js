@@ -1,11 +1,10 @@
 ce_get_playlists_button = document.getElementById("get-playlists");
-ce_sign_in_button = document.getElementById("sign-in");
 
 if (ce_get_playlists_button) {
     ce_get_playlists_button.addEventListener("click", () => {
         chrome.runtime.sendMessage(
             {
-                message: "fetch_playlists",
+                message: "get-playlists",
                 payload: null,
             },
             (response) => {
@@ -17,13 +16,37 @@ if (ce_get_playlists_button) {
     });
 }
 
-if (ce_sign_in_button) {
-    ce_sign_in_button.addEventListener("click", function () {
-        chrome.runtime.sendMessage({ message: "login" }, function (response) {
+document.querySelector("#sign-in").addEventListener("click", () => {
+    chrome.runtime.sendMessage(
+        {
+            message: "login",
+        },
+        (response) => {
             if (response.message === "success") {
-                ce_sign_in_button.innerHTML = `Working!`;
-                window.close();
             }
-        });
-    });
-}
+        }
+    );
+});
+
+document.querySelector("#sign-out").addEventListener("click", () => {
+    chrome.runtime.sendMessage(
+        {
+            message: "logout",
+        },
+        (response) => {
+            if (response.message === "success") {
+            }
+        }
+    );
+});
+
+// if (ce_sign_in_button) {
+//     ce_sign_in_button.addEventListener("click", function () {
+//         chrome.runtime.sendMessage({ message: "login" }, function (response) {
+//             if (response.message === "success") {
+//                 ce_sign_in_button.innerHTML = `Working!`;
+//                 window.close();
+//             }
+//         });
+//     });
+// }
