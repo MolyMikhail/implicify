@@ -18,17 +18,12 @@ if (ce_get_playlists_button) {
 }
 
 if (ce_sign_in_button) {
-    ce_sign_in_button.addEventListener("click", () => {
-        chrome.runtime.sendMessage(
-            {
-                message: "login",
-                payload: null,
-            },
-            (response) => {
-                if (response.message === "success") {
-                    ce_sign_in_button.innerHTML = `Working!`;
-                }
+    ce_sign_in_button.addEventListener("click", function () {
+        chrome.runtime.sendMessage({ message: "login" }, function (response) {
+            if (response.message === "success") {
+                ce_sign_in_button.innerHTML = `Working!`;
+                window.close();
             }
-        );
+        });
     });
 }
