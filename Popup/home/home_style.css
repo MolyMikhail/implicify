@@ -16,6 +16,8 @@ body {
     flex-direction: row;
     align-items: center;
     width: 100%;
+    position: fixed;
+
 }
 .Profile_Pic {
     border-radius: 90px;
@@ -47,15 +49,23 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+   justify-content: center;
+   overflow: auto;
+    text-align: justify;
+    
+    
 }
 .row {
     display: flex;
     flex-direction: row;
     width: 100%;
+    justify-content: center;
 }
 
 .album {
     width: 100px;
     height: 100px;
-    border-radius: 10px;
+    border-radius: 20px;
+    padding:10px;
+
 }
