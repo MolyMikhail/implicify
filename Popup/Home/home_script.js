@@ -4,6 +4,7 @@ document.onload = chrome.runtime.sendMessage(
     },
     (response) => {
         if (response.message === "success") {
+            
         }
     }
 );

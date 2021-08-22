@@ -70,8 +70,19 @@ const fetchPlaylists = async (token) => {
     return data;
 };
 
-const fetchSongsFromPlaylist = async (token, playlistID) => {
-    // Call API
+const fetchSongsFromPlaylist = async (token, playlistId) => {
+    console.log("Getting songs from playlist with ID: " + playlistId);
+
+    const result = await fetch(
+        `https://api.spotify.com/v1/playlists/${playlistId}`,
+        {
+            method: "GET",
+            headers: { Authorization: "Bearer " + token },
+        }
+    );
+
+    const data = await result.json();
+    return data;
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -146,58 +157,62 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else if (request.message === "get-playlists") {
         let playlists = [];
 
-        const PROMISE = fetchPlaylists(accessToken).then((result) => {
+        fetchPlaylists(accessToken).then((result) => {
             for (let i = 0; i < result.items.length; i++)
-                playlists.push({
-                    playlistName: result.items[i].get(),
-                    playlistCoverURL,
-                });
+                playlists.push(
+                    // result.items[i]
+                    {
+                        playlistId: result.items[i]["id"],
+                        playlistName: result.items[i]["name"],
+                        playlistCoverURL: result.items[i]["images"][0]["url"],
+                    }
+                );
         });
 
         console.log(playlists);
 
-        // arr = [];
-
-        // const PLAYLISTS = Promise.all()
-
-        // promise
-        //     .then((result) => result.items)
-        //     .then((result) => {
-        //         // let PLAYLISTS = result.items;
-        //         console.log(result);
-        //         chrome.storage.local.set({ playlists: result });
-        //     });
-
-        // chrome.storage.local.get("playlists", (data) => {
-        //     console.log("playlists: " + data.playlists);
-        // });
-
         sendResponse({
             message: "success",
-            payload: [
-                {
-                    playlistName: "",
-                    playlistCoverURL: "",
-                },
-                // ...
-            ],
+            payload: playlists,
         });
 
         return true;
     } else if (request.message === "get-songs-from-playlist") {
-        songs = fetchSongsFromPlaylist(accessToken, request.playlistID);
+        let playlist = {
+            songs: [],
+        };
+
+        fetchSongsFromPlaylist(accessToken, request.playlistId).then(
+            (result) => {
+                console.log(result);
+
+                playlist["playlistName"] = result["name"];
+                playlist["playlistCoverURL"] = result["images"][0]["url"];
+
+                for (let i = 0; i < result.tracks.items.length; i++)
+                    playlist["songs"].push({
+                        songId: result.tracks.items[i]["track"]["id"],
+                        songName: result.tracks.items[i]["track"]["name"],
+                        songArtist: result.tracks.items[i]["track"]["artists"],
+                        isExplicit: result.tracks.items[i]["track"]["explicit"],
+                        albumCoverURL:
+                            result.tracks.items[i]["track"]["album"][
+                                "images"
+                            ][0]["url"],
+                        albumId: result.tracks.items[i]["track"]["album"]["id"],
+                        albumName:
+                            result.tracks.items[i]["track"]["album"]["name"],
+                        albumArtist:
+                            result.tracks.items[i]["track"]["album"]["artists"],
+                    });
+            }
+        );
+
+        console.log(playlist);
 
         sendResponse({
             message: "success",
-            payload: [
-                {
-                    songName: "",
-                    songArtist: "",
-                    songCoverURL: "",
-                    isExplicit: false,
-                },
-                // ...
-            ],
+            payload: playlist,
         });
     }
     return true;

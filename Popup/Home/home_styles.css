@@ -1,0 +1,94 @@
+body {
+    width: 300px;
+    height: 550px;
+    margin: 0;
+
+    background: linear-gradient(#21272c, #121517);
+    background-attachment: fixed;
+}
+
+.header {
+    font-size: 12px;
+
+    background: rgba(0, 0, 0, 0.75);
+    /* background: linear-gradient(#1a1f23, #121517); */
+
+    color: white;
+    font-weight: 30;
+
+    text-align: center;
+    position: fixed;
+
+    top: 0;
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.profile-pic {
+    border-radius: 90px;
+    width: 26px;
+    height: 27px;
+    left: 35px;
+    top: 48px;
+    align-items: center;
+    padding: 5px;
+}
+
+.action-icon {
+    width: 21px;
+    height: 21px;
+    padding: 5px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    /* overflow-y: hidden; */
+    text-align: justify;
+    padding-top: 35%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    padding-bottom: 0px;
+}
+
+.album {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 10px 0 10px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.album-cover {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+}
+
+.album-name {
+    color: white;
+    /* padding: 5px; */
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+#title {
+    padding-left: 10px;
+    padding-right: 20px;
+}
