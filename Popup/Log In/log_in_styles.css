@@ -1,3 +1,23 @@
+@font-face {
+    font-family: "CircularStd-Medium";
+    src: url("../../Assets/Fonts/CircularStd-Medium.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd-Bold";
+    src: url("../../Assets/Fonts/CircularStd-Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd-Book";
+    src: url("../../Assets/Fonts/CircularStd-Book.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "CircularStd-Light";
+    src: url("../../Assets/Fonts/CircularStd-Light.otf") format("opentype");
+}
+
 body {
     width: 300px;
     height: 550px;
@@ -10,7 +30,60 @@ body {
     background-color: #2b4d61;
 }
 
-.header {
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+        opacity: 0%;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        color: rgba(255, 255, 255, 0);
+    }
+    100% {
+        color: rgba(255, 255, 255, 1);
+    }
+}
+
+#header-image-1 {
+    animation: 4s ease-out 0s 1 slideInFromTop;
+
+    width: 300px;
+    height: 500px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#header-image-2 {
+    animation: 3.5s ease-out 0s 1 slideInFromTop;
+
+    width: 300px;
+    height: 500px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#header-image-3 {
+    animation: 3s ease-out 0s 1 slideInFromTop;
+
     width: 300px;
     height: 500px;
 
@@ -34,6 +107,10 @@ body {
 }
 
 #log-in-button {
+    animation: 4s ease-out 0s 1 slideInFromBottom;
+
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.5));
+
     color: white;
     background-color: transparent;
     border-color: transparent;
@@ -47,6 +124,8 @@ body {
     align-items: center;
 
     transition: 0.5s;
+
+    font-family: "CircularStd-Medium";
 }
 
 #log-in-button:hover {
@@ -75,8 +154,10 @@ body {
 }
 
 h1 {
+    animation: 4s ease-in 0s 1 fadeIn;
     position: absolute;
     top: 4%;
     color: white;
     font-size: 40px;
+    font-family: "CircularStd-Bold";
 }

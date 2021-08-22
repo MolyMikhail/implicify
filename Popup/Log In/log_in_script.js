@@ -6,7 +6,6 @@ document.querySelector("#log-in-button").addEventListener("click", () => {
         },
         (response) => {
             if (response.message === "success") {
-                // Change to home page
                 window.location.href = "../Home/home.html";
             }
         }

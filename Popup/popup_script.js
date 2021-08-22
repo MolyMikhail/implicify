@@ -5,7 +5,6 @@ if (ce_get_playlists_button) {
         chrome.runtime.sendMessage(
             {
                 message: "get-playlists",
-                payload: null,
             },
             (response) => {
                 if (response.message === "success") {

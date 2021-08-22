@@ -85,6 +85,55 @@ const fetchSongsFromPlaylist = async (token, playlistId) => {
     return data;
 };
 
+const createPlaylist = async (token, user_id) => {
+    console.log("Creating new playlist");
+
+    const result = await fetch(
+        `https://api.spotify.com/v1/users/${user_id}/playlists`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+                body: {
+                    name: "My Playlist (Filtered)",
+                    public: false,
+                },
+            },
+        }
+    );
+
+    await fetch(`https://api.spotify.com/v1/playlists/${result.id}/tracks`, {
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+            body: {
+                uris: [
+                    "spotify:track:2BAAoamf83Le11piRhjDvL",
+                    "spotify:track:2Pner0zYKaSPQ3YeYYXdup",
+                    "spotify:track:1EI9qW9ycqUbKYV65dqUeu",
+                ],
+            },
+        },
+    });
+
+    const data = await result.json();
+    return data["external_urls"]["spotify"];
+};
+
+const getCurrentUserId = async (token) => {
+    console.log("Getting current user id");
+
+    const result = await fetch(`https://api.spotify.com/v1/me`, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+    });
+
+    const data = await result.json();
+    return data.id;
+};
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === "login") {
         console.log("'login' request called.");
@@ -155,10 +204,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         return true;
     } else if (request.message === "get-playlists") {
-        let playlists = [];
+        var playlists = [];
 
         fetchPlaylists(accessToken).then((result) => {
-            for (let i = 0; i < result.items.length; i++)
+            for (let i = 0; i < result.items.length; i++) {
                 playlists.push(
                     // result.items[i]
                     {
@@ -167,20 +216,60 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                         playlistCoverURL: result.items[i]["images"][0]["url"],
                     }
                 );
+            }
+            console.log("playlists in get-playlists:");
+            console.log(playlists);
+            console.log(JSON.stringify(playlists));
+
+            sendResponse({
+                message: "success",
+                payload: [...playlists],
+            });
         });
 
-        console.log(playlists);
+        // chrome.storage
 
-        sendResponse({
-            message: "success",
-            payload: playlists,
+        return true;
+    } else if (request.message === "set-playlist-id") {
+        chrome.storage.local.set(
+            {
+                selectedPlaylistId: request.playlistId,
+            },
+            () => {
+                if (chrome.runtime.lastError) {
+                    sendResponse({
+                        message: "fail",
+                    });
+                }
+
+                sendResponse({
+                    message: "success",
+                });
+            }
+        );
+        return true;
+    } else if (request.message === "get-playlist-id") {
+        chrome.storage.local.get("selectedPlaylistId", (data) => {
+            if (chrome.runtime.lastError) {
+                sendResponse({
+                    message: "failed",
+                });
+                return;
+            }
+
+            sendResponse({
+                message: "success",
+                payload: data.selectedPlaylistId,
+            });
         });
-
         return true;
     } else if (request.message === "get-songs-from-playlist") {
         let playlist = {
             songs: [],
         };
+
+        console.log("Displaying request.playlistId:");
+        console.log(request.playlistId);
 
         fetchSongsFromPlaylist(accessToken, request.playlistId).then(
             (result) => {
@@ -193,7 +282,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     playlist["songs"].push({
                         songId: result.tracks.items[i]["track"]["id"],
                         songName: result.tracks.items[i]["track"]["name"],
-                        songArtist: result.tracks.items[i]["track"]["artists"],
+                        songArtists: result.tracks.items[i]["track"]["artists"],
                         isExplicit: result.tracks.items[i]["track"]["explicit"],
                         albumCoverURL:
                             result.tracks.items[i]["track"]["album"][
@@ -205,15 +294,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                         albumArtist:
                             result.tracks.items[i]["track"]["album"]["artists"],
                     });
+
+                sendResponse({
+                    message: "success",
+                    payload: { ...playlist },
+                });
             }
         );
-
-        console.log(playlist);
-
-        sendResponse({
-            message: "success",
-            payload: playlist,
+        return true;
+    } else if (request.message === "create-playlist") {
+        getCurrentUserId(accessToken).then((userId) => {
+            createPlaylist(accessToken, userId).then((playlistURL) => {
+                sendResponse({
+                    message: "success",
+                    newPlaylistURL: playlistURL,
+                });
+            });
         });
+
+        return true;
     }
     return true;
 });

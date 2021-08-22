@@ -1,7 +1,7 @@
 {
-    "name": "My First Chrome Extension",
-    "description": "Test Extension",
-    "version": "0.1.0",
+    "name": "Implicify",
+    "description": "Convert your Spotify playlists to a non-explicit version!",
+    "version": "0.9.0",
     "manifest_version": 3,
     "icons": {
         "16": "./Assets/logo-16x16.png",
@@ -13,7 +13,7 @@
         "service_worker": "./background.js"
     },
     "action": {
-        "default_popup": "./Popup/popup.html",
+        "default_popup": "./Popup/Log In/log_in.html",
         "default_icons": {
             "16": "./Assets/logo-16x16.png",
             "32": "./Assets/logo-32x32.png",
