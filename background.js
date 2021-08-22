@@ -144,14 +144,40 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         return true;
     } else if (request.message === "get-playlists") {
-        console.log(fetchPlaylists(accessToken));
+        let playlists = [];
+
+        const PROMISE = fetchPlaylists(accessToken).then((result) => {
+            for (let i = 0; i < result.items.length; i++)
+                playlists.push({
+                    playlistName: result.items[i].get(),
+                    playlistCoverURL,
+                });
+        });
+
+        console.log(playlists);
+
+        // arr = [];
+
+        // const PLAYLISTS = Promise.all()
+
+        // promise
+        //     .then((result) => result.items)
+        //     .then((result) => {
+        //         // let PLAYLISTS = result.items;
+        //         console.log(result);
+        //         chrome.storage.local.set({ playlists: result });
+        //     });
+
+        // chrome.storage.local.get("playlists", (data) => {
+        //     console.log("playlists: " + data.playlists);
+        // });
 
         sendResponse({
             message: "success",
             payload: [
                 {
-                    albumName: "",
-                    albumCoverURL: "",
+                    playlistName: "",
+                    playlistCoverURL: "",
                 },
                 // ...
             ],
