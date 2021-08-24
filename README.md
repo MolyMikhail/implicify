@@ -40,9 +40,11 @@ your local web browser for development and testing purposes. The product is not 
 3. Enable developer mode at the top right
 
 ![Google Chrome developer mode toggle](https://i.imgur.com/KIK09HM.png)
+
 4. Click `Load unpacked` at the top left
 
 ![Load unpacked button](https://i.imgur.com/WjdrOr5.png)
+
 5. Navigate to the downloaded project folder and select it
 6. Toggle the extension on using the switch at the bottom right
 
