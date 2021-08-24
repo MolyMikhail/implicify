@@ -225,5 +225,5 @@ This Google Chrome extension can be activated by clicking the `Extensions` icon 
     - Developed the back-end using JavaScript and Spotify API, connecting every part of the code together
 
 See also the list of
-~~[contributors](https://github.com/MolyMikhail/implicify/contributors)~~
+[contributors](https://github.com/MolyMikhail/implicify/contributors)
 who participated in this project.
