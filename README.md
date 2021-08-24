@@ -6,8 +6,6 @@ _[Product Demo](https://youtu.be/UXLnbLJ62JY)_
 
 ## 📝 Contents
 
----
-
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installing](#installing)
@@ -23,15 +21,17 @@ _[Product Demo](https://youtu.be/UXLnbLJ62JY)_
 
 ## 🚀 Getting Started
 
----
-
 These instructions will give you a copy of the project up and running on
 your local web browser for development and testing purposes. The product is not currently available yet on the [Google Chrome Web Store](https://chrome.google.com/webstore).
+
+---
 
 ### Prerequisites
 
 - [Google Chrome v88+ w/ Manifest V3 support](https://www.google.com/intl/en_ca/chrome/)
 - [Spotify Account](https://www.spotify.com/us/signup/)
+
+---
 
 ### Installing
 
@@ -51,8 +51,6 @@ your local web browser for development and testing purposes. The product is not 
 ![Extension card view with toggle at bottom right](https://i.imgur.com/P7o8SU9.png)
 
 ## ⚙️ How it Works
-
----
 
 ### Google Chrome Extension
 
@@ -151,6 +149,8 @@ for (let i = 0; i < data.payload.songs.length; i++) {
                         }
 ```
 
+---
+
 ### Spotify API
 
 Spotify's API allows the program to communicate with Spotify and its database, being able to fetch songs and playlist information through an API URL endpoint. For example, this function fetches all the songs' name, artists, album info, etc. from a specific playlist, given an authentication token and playlist ID.
@@ -174,6 +174,8 @@ const fetchSongsFromPlaylist = async (token, playlistId) => {
 
 Using this, fetching each song's non-explicit version was easily achievable by comparing the explicit version's album data with coordinating non-explicit versions of the album, which then we could use to extract the non-explicit version of the track, and add it into the new playlist.
 
+---
+
 ### Inspiration
 Implicify is built on the concept of aiding regular Spotify users with finding non-explicit versions of songs easily, especially for those who wish to use Spotify as their main music platform for younger audiences (i.e. teachers, camp counsellors, parents, etc.)
 
@@ -183,9 +185,13 @@ To manually retrieve the non-explicit version of a Spotify song, you are require
 
 Implicify automates all the manual work for you, as anyone can just tell the program which playlist to filter with in a few button clicks, converting every song inside the playlist, instead of manually taking 5 steps for every song.
 
+---
+
 ### Challenges We Ran Into
 - Conflicts with asynchronous API calls and data transmission between different file-types
 - Working with Spotify API's single sign-on (SSO) and token authentication
+
+---
 
 ### What We Learned
 - Designing and prototyping the program with Figma
@@ -195,6 +201,8 @@ Implicify automates all the manual work for you, as anyone can just tell the pro
 - How to manage and handle JavaScript Promise objects
 - Organizing JavaScript asychronous API calls to achieve parallelism programming
 
+---
+
 ### Running the Program
 
 This Google Chrome extension can be activated by clicking the `Extensions` icon on the top right of your Google Chrome browser (puzzle piece icon), and clicking on the `Implicify` extension.
@@ -203,8 +211,6 @@ This Google Chrome extension can be activated by clicking the `Extensions` icon 
 
 ## ✔️ Future Features
 
----
-
 🗹 Ability to detect Spotify playlist links from active, opened Chrome tabs
 
 🗹 Nonobstructive pop-up prompting user to use the detected Spotify playlist
@@ -212,8 +218,6 @@ This Google Chrome extension can be activated by clicking the `Extensions` icon 
 🗹 Option to select multiple Spotify playlists to filter and merge into a single, non-explicit playlist
 
 ## ✏️ Contributors
-
----
 
   - **Moly Mikhail** - [MolyMikhail](https://github.com/MolyMikhail)
     - Completed the front-end development with HTML5 & CSS3, ensuring the best software user experience
